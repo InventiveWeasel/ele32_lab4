@@ -2,8 +2,9 @@ package ele_32_lab4;
 
 public class Viterbi {
 	//private  String [][] matrix = new String[64][64];
-	private Estado[] trelica = new Estado[64]; 
 	private String texto = "";
+	private int NUM_STATES = 4;
+	private Estado[] trelica = new Estado[NUM_STATES]; 
 	
 	public Viterbi(){
 		setTrelica();
@@ -15,7 +16,7 @@ public class Viterbi {
 	
 	//Funcao para construir a trelica do decodificador
 	private void setTrelica(){
-		Codificador cod = new Codificador();
+		Codificador2 cod = new Codificador2();
 		
 		//Inicializamos a matriz
 		/*for (int i=0; i<64; i++){
@@ -25,10 +26,10 @@ public class Viterbi {
 		}
 		*/
 		
-		for(int i=0; i<64; i++){
+		for(int i=0; i<NUM_STATES; i++){
 			//String de 6 bits que representa o estado do codificador
 			String binario = Integer.toBinaryString(i);
-			for(; binario.length() < 6;)
+			for(; binario.length() < 2;)
 				binario = "0" + binario;
 			
 			//Settamos o estado
@@ -62,15 +63,17 @@ public class Viterbi {
 	
 	public void algoritmoViterbi(String input){
 		texto = input;
-		Estado[][] matrixVit = new Estado[64][1017];
-		int[] custo = new int[64];
+		Estado[][] matrixVit = new Estado[NUM_STATES][1017];
+		int[] custo = new int[NUM_STATES];
+		int[] custoAnt = new int[NUM_STATES];
 		
-		for (int i=0; i<64; i++){
-			for (int j=0; j<64; j++){
+		for (int i=0; i<NUM_STATES; i++){
+			for (int j=0; j<1017; j++){
 				matrixVit[i][j]=new Estado();
 				matrixVit[i][j].setId(j);
 			}
 			custo[i]=-1;
+			custoAnt[i]=-1;
 		}
 		
 		custo[0] = 0;
@@ -78,12 +81,22 @@ public class Viterbi {
 		int auxDist;
 		int estado1, estado0;
 		//int simbolo = Integer.parseInt(texto.substring(k, k+2),2);
-		String simbolo = texto.substring(k, k+2);
+		//String simbolo = texto.substring(k, k+2);
+		String simbolo = texto.substring(k, k+3);
+		boolean foiAlcancado[] = {false, false, false, false};
+		foiAlcancado[0] = true;
 		
 		for(int i = 0; i < 1017;i++){
+			//Guardar valores antes de serem alterados
+			guardarCustos(custo, custoAnt);
 			System.out.println("Iteracao: "+i+1);
-			for(int j=0; j<64; j++){
-				if(custo[j] != -1){
+			for(int j=0; j<NUM_STATES; j++){
+				if(custo[j] != -1)
+					foiAlcancado[j] = true;
+					
+			}
+			for(int j=0; j<NUM_STATES; j++){
+				if(foiAlcancado[j]){
 					estado0 = trelica[j].getEstado0();
 					estado1 = trelica[j].getEstado1();
 					//Inicializando os valores das novas transições acrescentadas com zero
@@ -109,21 +122,22 @@ public class Viterbi {
 				//matrixVit[estado1][i+1].setTrans1(trelica[j].getTrans1(), j);
 				
 			}
-			for(int j=0; j<64; j++){
+			for(int j=0; j<NUM_STATES; j++){
 				//Calculo da distancia mínima
 				if(custo[j]!= -1){
-					int min = 1000000, auxMin, minState = -1;
+					int min = 1000000, auxMin = 1000000, minState = -1;
 					Estado auxState;
+					//Iteramos sobre os estados anteriores que levam ao estado j na iteração i+1
 					for(int m = 0; m < matrixVit[j][i+1].getNumberPrevSta(); m++){
 						//Transicao com 0
-						//auxDist = calculateDist(simbolo, trelica[j].getTrans0());
 						auxState = matrixVit[j][i+1].getPrevState(m);
+						//Verficamos quais transiçoes foram utilizadas para chegar no mesmo
 						if(auxState.getEstado0() == j){
-							auxDist = calculateDist(simbolo, auxState.getTrans0());
-							auxMin = custo[auxState.getId()]+auxDist;
+							auxDist = calculateDist(simbolo, auxState.getTrans0()) + custoAnt[auxState.getId()];
+							//auxMin = custo[auxState.getId()]+auxDist;
 							
-							if(m==0 || (auxMin < min) ){
-								min = auxMin;
+							if(m==0 || (auxDist < min) ){
+								min = auxDist;
 								minState = auxState.getId();
 							}
 						}
@@ -131,22 +145,26 @@ public class Viterbi {
 						
 						//Transicao com 1
 						if(auxState.getEstado1() == j){
-							auxDist = calculateDist(simbolo, auxState.getTrans1());
-							auxMin = custo[auxState.getId()]+auxDist;
-							if(auxMin < min){
-								min = auxMin;
+							//auxDist = calculateDist(simbolo, auxState.getTrans1());
+							auxDist = calculateDist(simbolo, auxState.getTrans1()) + custoAnt[auxState.getId()];
+							//auxMin = custo[auxState.getId()]+auxDist;
+							if(auxDist < min){
+								min = auxDist;
 								minState = auxState.getId();
 							}
 						}
-						if(minState != -1){
-							custo[j] = custo[minState] + min;
-							matrixVit[j][i+1].deleteAllPrev();
-							matrixVit[j][i+1].addPrevState(trelica[minState]);
-						}
+						
+					}
+					if(minState != -1){
+						custo[j] = min;
+						matrixVit[j][i+1].deleteAllPrev();
+						matrixVit[j][i+1].addPrevState(trelica[minState]);
 					}
 				}
 				
 			}
+			k = k+3;
+			simbolo = texto.substring(k, k+3);
 		}
 		int min = 1000000;
 		for(int i = 0; i < custo.length; i++){
@@ -158,6 +176,13 @@ public class Viterbi {
 					
 	}
 	
+	private void guardarCustos(int[] custo, int[] custoAnt) {
+		for(int i = 0; i < NUM_STATES; i++){
+			custoAnt[i] = custo[i];
+		}
+		
+	}
+
 	private int calculateDist(String x, String y){
 		String result = xor(x,y);
 		int dist = 0;
