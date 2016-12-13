@@ -24,12 +24,12 @@ public class Codificador{
 	}
 	
 	public void setEstado(String estado){
-		estados[5] = Character.getNumericValue(estado.charAt(5));
-		estados[4] = Character.getNumericValue(estado.charAt(4));
-		estados[3] = Character.getNumericValue(estado.charAt(3));
-		estados[2] = Character.getNumericValue(estado.charAt(2));
-		estados[1] = Character.getNumericValue(estado.charAt(1));
-		estados[0] = Character.getNumericValue(estado.charAt(0));
+		estados[5] = Character.getNumericValue(estado.charAt(0));
+		estados[4] = Character.getNumericValue(estado.charAt(1));
+		estados[3] = Character.getNumericValue(estado.charAt(2));
+		estados[2] = Character.getNumericValue(estado.charAt(3));
+		estados[1] = Character.getNumericValue(estado.charAt(4));
+		estados[0] = Character.getNumericValue(estado.charAt(5));
 	}
 	
 	public int getEstado(){	
