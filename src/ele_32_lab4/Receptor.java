@@ -43,7 +43,8 @@ public class Receptor {
 					bitsDesembaralhados += Integer.toString(bitdesemb);
 				}
 				
-				//Bits desembaralhados
+				//Decodificação utilizando o algoritmo de Viterbi
+				
 				
 				
 				
