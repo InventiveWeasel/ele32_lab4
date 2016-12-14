@@ -36,9 +36,11 @@ public class Viterbi {
 			String binario = Integer.toBinaryString(i);
 			for(; binario.length() < 2;)
 				binario = "0" + binario;
-			//for(int j = binario.length(); j < 0; j--){
-			//	id = id + binario.charAt(j-1)
-			//}
+			/*String id = "";
+			for(int j = binario.length(); j > 0; j--){
+				id = id + binario.charAt(j-1);
+			}
+			*/
 			//Settamos o estado
 			cod.setEstado(binario);
 			
@@ -47,6 +49,7 @@ public class Viterbi {
 			int estado0 = cod.getEstado();
 			//matrix[i][estado0] = transicao0;
 			trelica[i] = new Estado();
+			///trelica[i].setId(Integer.parseInt(id,2));
 			trelica[i].setId(i);
 			trelica[i].setTrans0(transicao0, estado0);
 	
