@@ -20,7 +20,7 @@ public class Viterbi {
 	
 	//Funcao para construir a trelica do decodificador
 	private void setTrelica(){
-		Codificador cod = new Codificador();
+		CodificadorOriginal cod = new CodificadorOriginal();
 		
 		for(int i=0; i<NUM_STATES; i++){
 			
@@ -50,14 +50,14 @@ public class Viterbi {
 			int estado1 = cod.getEstado();
 			trelica[i].setTrans1(transicao1, estado1);
 			
-			System.out.println(i + " -> " + estado0 + ": " + "0/" + transicao0);
-			System.out.println(i + " -> " + estado1 + ": " + "1/" + transicao1);
+			//System.out.println(i + " -> " + estado0 + ": " + "0/" + transicao0);
+			//System.out.println(i + " -> " + estado1 + ": " + "1/" + transicao1);
 		}
 		
 		for(int i=0; i<NUM_STATES; i++){
 			int j = +32;
-			System.out.println(i + " -> " + trelica[i].getEstado0() + ": " + "0/" + trelica[i].getTrans0()+"\t"+j + " -> " + trelica[j].getEstado0() + ": " + "0/" + trelica[j].getTrans0());
-			System.out.println(i + " -> " + trelica[i].getEstado1() + ": " + "1/" + trelica[i].getTrans1()+"\t"+j + " -> " + trelica[j].getEstado1() + ": " + "1/" + trelica[j].getTrans1());
+			//System.out.println(i + " -> " + trelica[i].getEstado0() + ": " + "0/" + trelica[i].getTrans0()+"\t"+j + " -> " + trelica[j].getEstado0() + ": " + "0/" + trelica[j].getTrans0());
+			//System.out.println(i + " -> " + trelica[i].getEstado1() + ": " + "1/" + trelica[i].getTrans1()+"\t"+j + " -> " + trelica[j].getEstado1() + ": " + "1/" + trelica[j].getTrans1());
 		}
 		
 		
@@ -110,9 +110,9 @@ public class Viterbi {
 					foiAlcancado[j] = true;
 					
 			}
-			System.out.println("Iteraçao "+i);
-			System.out.println(custoaux);
-			System.out.println(simbolo);
+			//System.out.println("Iteraçao "+i);
+			//System.out.println(custoaux);
+			//System.out.println(simbolo);
 			for(int j=0; j<NUM_STATES; j++){
 				if(foiAlcancado[j]){
 					estado0 = trelica[j].getEstado0();
@@ -236,11 +236,12 @@ public class Viterbi {
 			minIndex = auxState.getId();
 		}
 		*/
-		for(int j = 0; j < x; j++){
-			minIndex = custosMin[j];
+		//for(int j = 0; j < x; j++){
+			//minIndex = custosMin[j];
+		String mens = "";
 			for(int i = NUM_IT-1; i > 0; i--){
 				int o = i-1;
-				System.out.println("Iteração: "+o);
+				//System.out.println("Iteração: "+o);
 				
 				auxState = matrixVit[minIndex][i].getPrevState(0);
 				if(matrixVit[minIndex][i].getTransPrev() == 0){
@@ -251,22 +252,20 @@ public class Viterbi {
 					mensEnviada.add(auxState.getTrans1());
 					mensSent.add("1");
 				}
-				System.out.println(mensSent.get(NUM_IT-1-i) + " -> "+ mensEnviada.get(NUM_IT-1-i));
+				//System.out.println(mensSent.get(NUM_IT-1-i) + " -> "+ mensEnviada.get(NUM_IT-1-i));
 				minIndex = auxState.getId();
 			}
 			Collections.reverse(mensSent);
-			String mens = "";
 			for(int y = 0; y < mensSent.size(); y++)
 				mens = mens + mensSent.get(y);
-			System.out.println("mens min "+j+": "+ mens);
+			//System.out.println("mens min "+j+": "+ mens);
 			mensSent.clear();
 			
-		}
 		Collections.reverse(mensEnviada);
 		///Collections.reverse(mensSent);
 		
 		
-		String mens = "", mensEnv = "";
+		String mensEnv = "";
 		//for(int j = 0; j < mensSent.size(); j++)
 			///mens = mens + mensSent.get(j);
 		for(int j = 0; j < mensEnviada.size(); j++)
@@ -294,16 +293,17 @@ public class Viterbi {
 		///System.out.println("O numero de erros é: "+contaErros);
 		//System.out.println("A mensagem é:"+mens.length()+"   "+mens);
 		
-		String original = input;
-		String xor2 = xor(mens, original.substring(0, mens.length()));
-		int contaErros2 = 0;
-		for(int i=0; i < xor2.length(); i++){
-			if(xor2.charAt(i)=='1')
-				contaErros2++;
-		}
-		System.out.println("Erros = "+contaErros2);
-		System.out.println("Original: "+original);
-		System.out.println("Recebida: "+mens);
+		//String original = input;
+		//String xor2 = xor(mens, original.substring(0, mens.length()));
+		//int contaErros2 = 0;
+		//for(int i=0; i < xor2.length(); i++){
+		//	if(xor2.charAt(i)=='1')
+		//		contaErros2++;
+		//}
+		//System.out.println("Erros = "+contaErros2);
+		//System.out.println("Original: "+original);
+		//System.out.println("Recebida: "+mens);
+		System.out.println("Decodificada: "+mens);
 		return mens;
 	}
 	

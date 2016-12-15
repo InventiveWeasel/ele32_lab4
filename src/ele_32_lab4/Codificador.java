@@ -40,9 +40,9 @@ public class Codificador{
 	public String getSaida(int entrada){
 		contador++;
 		saida1 = (((((entrada + estados[0])%2) + estados[1])%2 + estados[2])%2 + estados[5])%2;
-		///saida1 = (saida1 + scram.getBit())%2;
+		saida1 = (saida1 + scram.getBit())%2;
 		saida2 = (((((entrada + estados[1])%2) + estados[2])%2 + estados[4])%2 + estados[5])%2; 
-		///saida2 = (saida2 + scram.getBit())%2;
+		saida2 = (saida2 + scram.getBit())%2;
 		
 		if(contador == 1000){
 			resetEstados();

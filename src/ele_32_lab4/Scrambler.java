@@ -14,7 +14,7 @@ public class Scrambler {
 	}
 	
 	public int getBit(){
-		if(contador == 2000){
+		if(contador == 2032){
 			reset();
 		}
 		System.arraycopy(states, 0, auxStates, 0, states.length);
