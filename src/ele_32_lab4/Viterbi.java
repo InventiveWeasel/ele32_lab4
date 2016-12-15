@@ -9,6 +9,7 @@ public class Viterbi {
 	private int NUM_STATES = 64;
 	private int NUM_IT = 1001;
 	private Estado[] trelica = new Estado[NUM_STATES]; 
+	private int custoTotal = 0;
 	
 	public Viterbi(){
 		setTrelica();
@@ -217,7 +218,8 @@ public class Viterbi {
 				x++;
 			}
 		}
-		System.out.println("custo minimo = "+ min);
+		custoTotal = custoTotal + min;
+		//System.out.println("custo minimo = "+ min);
 		//Agora que temos os custos, devemos encontrar a mensagem enviada
 		ArrayList<String> mensEnviada = new ArrayList<String>();
 		ArrayList<String> mensSent = new ArrayList<String>();
@@ -303,10 +305,13 @@ public class Viterbi {
 		//System.out.println("Erros = "+contaErros2);
 		//System.out.println("Original: "+original);
 		//System.out.println("Recebida: "+mens);
-		System.out.println("Decodificada: "+mens);
+		//System.out.println("Decodificada: "+mens);
 		return mens;
 	}
 	
+	public int getCusto(){
+		return custoTotal;
+	}
 	private void guardarCustos(int[] custo, int[] custoAnt) {
 		for(int i = 0; i < NUM_STATES; i++){
 			custoAnt[i] = custo[i];

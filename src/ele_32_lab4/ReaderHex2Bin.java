@@ -6,8 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 
-public class Reader {
+public class ReaderHex2Bin {
 	private BufferedReader input;
 	private int bitCounter;
 	private int db[];
@@ -15,7 +16,7 @@ public class Reader {
 	private String texto = "";
 	int counter = 0;
 	
-	public Reader(String file) throws IOException{
+	public ReaderHex2Bin(String file) throws IOException{
 		bitCounter = 0;
 		db = new int[8];
 		byteRec = 0;
@@ -26,6 +27,7 @@ public class Reader {
 			while((line = input.readLine()) != null)
 				texto = texto + line;
 			input.close();
+			texto = new BigInteger(texto,16).toString(2);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -34,7 +36,6 @@ public class Reader {
 	public String getTexto(){
 		return texto;
 	}
-	
 	public int getBit(){
 		/*
 		try {
